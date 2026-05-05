@@ -1,0 +1,34 @@
+.DS_Store
+Thumbs.db
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+auth.json
+*.key
+*.pem
+
+# Dependencies
+node_modules/
+vendor/
+
+# Build artifacts
+dist/
+dist-ssr/
+backend/public/build/
+backend/public/hot
+frontend/dist/
+
+# Logs and caches
+*.log
+.phpunit.cache/
+.phpunit.result.cache
+storage/logs/*.log
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
