@@ -15,6 +15,7 @@ const subjects = ref([])
 
 const roleOptions = [
   { value: 'student', label: 'Ученик' },
+  { value: 'parent', label: 'Родитель' },
   { value: 'teacher', label: 'Учитель' },
   { value: 'director', label: 'Директор' },
   { value: 'deputy_events', label: 'Зам. по мероприятиям' },
@@ -41,6 +42,7 @@ const roles = [
   { value: 'deputy_science', label: 'Зам. по НТР' },
   { value: 'teacher', label: 'Учитель' },
   { value: 'student', label: 'Ученик' },
+  { value: 'parent', label: 'Родитель' },
 ]
 
 async function fetchUsers() {

@@ -30,6 +30,7 @@ function getRoleGreeting() {
     deputy_science: 'Добро пожаловать!',
     teacher: 'Добро пожаловать, учитель!',
     student: 'Добро пожаловать!',
+    parent: 'Добро пожаловать!',
   }
   return map[auth.role] || 'Добро пожаловать!'
 }
@@ -83,9 +84,22 @@ function getRoleGreeting() {
       </router-link>
 
       <router-link to="/results"
+        v-if="!auth.isParent"
         class="bg-white rounded-xl border p-5 text-center hover:border-blue-300 hover:shadow-sm transition">
         <div class="text-2xl mb-2">📋</div>
         <div class="text-sm font-medium text-gray-700">Результаты</div>
+      </router-link>
+
+      <router-link to="/chat"
+        class="bg-white rounded-xl border p-5 text-center hover:border-blue-300 hover:shadow-sm transition">
+        <div class="text-2xl mb-2">💬</div>
+        <div class="text-sm font-medium text-gray-700">Общий чат</div>
+      </router-link>
+
+      <router-link v-if="auth.isParent" to="/teacher-votes"
+        class="bg-white rounded-xl border p-5 text-center hover:border-blue-300 hover:shadow-sm transition">
+        <div class="text-2xl mb-2">🗳️</div>
+        <div class="text-sm font-medium text-gray-700">Голосование</div>
       </router-link>
 
       <router-link v-if="auth.canVerify" to="/reports"

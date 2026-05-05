@@ -12,15 +12,29 @@ use App\Http\Controllers\Api\KpiController;
 use App\Http\Controllers\Api\RatingController;
 use App\Http\Controllers\Api\KpiSettingController;
 use App\Http\Controllers\Api\ReportController;
+use App\Http\Controllers\Api\ProfileController;
+use App\Http\Controllers\Api\ChatController;
+use App\Http\Controllers\Api\TeacherVoteController;
 
 // Публичные маршруты
 Route::post('/login', [AuthController::class, 'login']);
+Route::get('/chat/stream', [ChatController::class, 'stream']);
 
 // Защищённые маршруты
 Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
+    Route::put('/profile/password', [ProfileController::class, 'updatePassword']);
+    Route::post('/profile/avatar', [ProfileController::class, 'updateAvatar']);
+
+    // Общий чат
+    Route::get('/chat/messages', [ChatController::class, 'index']);
+    Route::post('/chat/messages', [ChatController::class, 'store']);
+
+    // Голосования за учителей
+    Route::get('/teacher-votes', [TeacherVoteController::class, 'index']);
+    Route::post('/teacher-votes', [TeacherVoteController::class, 'vote']);
 
     // Справочники (доступны всем авторизованным)
     Route::get('/subjects', [SubjectController::class, 'index']);
@@ -58,24 +72,30 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     // Регистрации на олимпиады
-    Route::get('/registrations', [RegistrationController::class, 'index']);
-    Route::post('/registrations', [RegistrationController::class, 'store']);
-    Route::delete('/registrations/{registration}', [RegistrationController::class, 'destroy']);
-    Route::put('/registrations/{registration}/status', [RegistrationController::class, 'updateStatus']);
+    Route::middleware('role:admin,director,deputy_events,deputy_edu,deputy_science,teacher,student')->group(function () {
+        Route::get('/registrations', [RegistrationController::class, 'index']);
+        Route::post('/registrations', [RegistrationController::class, 'store']);
+        Route::delete('/registrations/{registration}', [RegistrationController::class, 'destroy']);
+        Route::put('/registrations/{registration}/status', [RegistrationController::class, 'updateStatus']);
+    });
 
     // Результаты и верификация
-    Route::get('/results', [ResultController::class, 'index']);
-    Route::get('/results/pending', [ResultController::class, 'pending']);
-    Route::post('/results/{registration}', [ResultController::class, 'upload']);
+    Route::middleware('role:admin,director,deputy_events,deputy_edu,deputy_science,teacher,student')->group(function () {
+        Route::get('/results', [ResultController::class, 'index']);
+        Route::get('/results/pending', [ResultController::class, 'pending']);
+        Route::post('/results/{registration}', [ResultController::class, 'upload']);
+    });
     Route::middleware('role:admin,director,deputy_events,deputy_edu,deputy_science')->group(function () {
         Route::put('/results/{result}/verify', [ResultController::class, 'verify']);
         Route::put('/results/{result}/reject', [ResultController::class, 'reject']);
     });
 
     // KPI
-    Route::get('/kpi/my', [KpiController::class, 'my']);
-    Route::get('/kpi/user/{user}', [KpiController::class, 'forUser']);
-    Route::post('/kpi/appeals', [KpiController::class, 'storeAppeal']);
+    Route::middleware('role:admin,director,deputy_events,deputy_edu,deputy_science,teacher,student')->group(function () {
+        Route::get('/kpi/my', [KpiController::class, 'my']);
+        Route::get('/kpi/user/{user}', [KpiController::class, 'forUser']);
+        Route::post('/kpi/appeals', [KpiController::class, 'storeAppeal']);
+    });
     Route::middleware('role:admin,director,deputy_events,deputy_edu,deputy_science')->group(function () {
         Route::get('/kpi/appeals', [KpiController::class, 'appeals']);
         Route::put('/kpi/appeals/{appeal}', [KpiController::class, 'resolveAppeal']);

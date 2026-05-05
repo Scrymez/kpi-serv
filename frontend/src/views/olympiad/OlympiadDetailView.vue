@@ -12,11 +12,12 @@ const regForm = ref({ student_id: '', teacher2_id: '' })
 const students = ref([])
 const uploadForm = ref({ place: '', document: null })
 const uploadingFor = ref(null)
+const canManageRegistrations = auth.canVerify || auth.isTeacher
 
 onMounted(async () => {
   const [oRes, sRes] = await Promise.all([
     api.get(`/olympiads/${route.params.id}`),
-    auth.isTeacher || auth.canVerify ? api.get('/users', { params: { role: 'student' } }) : Promise.resolve({ data: { data: [] } })
+    canManageRegistrations ? api.get('/users', { params: { role: 'student' } }) : Promise.resolve({ data: { data: [] } })
   ])
   olympiad.value = oRes.data
   students.value = sRes.data.data || []
@@ -59,7 +60,7 @@ function formatDate(d) { return new Date(d).toLocaleDateString('ru-RU') }
         </div>
       </div>
       <button
-        v-if="!auth.isStudent"
+        v-if="canManageRegistrations"
         @click="registering = !registering"
         class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700 transition"
       >
@@ -107,7 +108,7 @@ function formatDate(d) { return new Date(d).toLocaleDateString('ru-RU') }
             </div>
           </div>
           <button
-            v-if="reg.result?.status === 'pending_upload'"
+            v-if="canManageRegistrations && reg.result?.status === 'pending_upload'"
             @click="uploadingFor = uploadingFor === reg.id ? null : reg.id"
             class="text-sm text-blue-600 hover:underline"
           >

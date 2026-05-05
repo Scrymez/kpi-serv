@@ -29,6 +29,13 @@ class ImportTemplateExport implements FromArray, WithHeadings, WithStyles, WithC
             ];
         }
 
+        if ($this->role === 'parent') {
+            return [
+                ['Иванова', 'Ольга', 'Павловна', '39'],
+                ['Петров', 'Андрей', 'Сергеевич', '42'],
+            ];
+        }
+
         // Сотрудники
         return [
             ['Иванова',  'Анна',    'Петровна',   '38', 'учитель',              'Математика'],
@@ -44,6 +51,9 @@ class ImportTemplateExport implements FromArray, WithHeadings, WithStyles, WithC
         if ($this->role === 'student') {
             return ['familiya', 'imya', 'otchestvo', 'vozrast', 'klass'];
         }
+        if ($this->role === 'parent') {
+            return ['familiya', 'imya', 'otchestvo', 'vozrast'];
+        }
         return ['familiya', 'imya', 'otchestvo', 'vozrast', 'dolzhnost', 'predmet'];
     }
 
@@ -51,6 +61,9 @@ class ImportTemplateExport implements FromArray, WithHeadings, WithStyles, WithC
     {
         if ($this->role === 'student') {
             return ['A' => 20, 'B' => 15, 'C' => 20, 'D' => 10, 'E' => 8];
+        }
+        if ($this->role === 'parent') {
+            return ['A' => 20, 'B' => 15, 'C' => 20, 'D' => 10];
         }
         return ['A' => 20, 'B' => 15, 'C' => 20, 'D' => 10, 'E' => 35, 'F' => 20];
     }
@@ -67,6 +80,10 @@ class ImportTemplateExport implements FromArray, WithHeadings, WithStyles, WithC
 
     public function title(): string
     {
-        return $this->role === 'student' ? 'Ученики' : 'Сотрудники';
+        return match ($this->role) {
+            'student' => 'Ученики',
+            'parent' => 'Родители',
+            default => 'Сотрудники',
+        };
     }
 }

@@ -37,6 +37,8 @@ class UsersImport implements ToCollection, WithHeadingRow
         'deputy_science'                        => 'deputy_science',
         'администратор'                         => 'admin',
         'admin'                                 => 'admin',
+        'родитель'                              => 'parent',
+        'parent'                                => 'parent',
     ];
 
     public function __construct(string $role)
@@ -103,6 +105,7 @@ class UsersImport implements ToCollection, WithHeadingRow
                     'role'        => $role,
                     'login'       => $login,
                     'password'    => Hash::make($plainPassword),
+                    'must_change_password' => true,
                 ]);
 
                 $this->credentials[] = [

@@ -64,6 +64,7 @@ class DatabaseSeeder extends Seeder
             'login' => 'admin',
             'password' => Hash::make('admin123'),
             'role' => 'admin',
+            'must_change_password' => true,
         ]);
 
         // KPI настройки по умолчанию
@@ -82,5 +83,6 @@ class DatabaseSeeder extends Seeder
         foreach ($settings as $s) {
             KpiSetting::create($s);
         }
+
     }
 }

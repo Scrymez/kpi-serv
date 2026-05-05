@@ -9,6 +9,7 @@ const loading = ref(false)
 const search = ref('')
 const levelFilter = ref('')
 const aiLoading = ref(false)
+const canCreateOlympiad = auth.canVerify || auth.isTeacher
 
 const levels = [
   { value: '', label: 'Все уровни' },
@@ -71,7 +72,7 @@ onMounted(fetchOlympiads)
           {{ aiLoading ? 'Поиск AI...' : 'Найти через AI' }}
         </button>
         <router-link
-          v-if="!auth.isStudent"
+          v-if="canCreateOlympiad"
           to="/olympiads/create"
           class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700 transition"
         >

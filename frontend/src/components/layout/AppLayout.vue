@@ -21,6 +21,17 @@ async function handleLogout() {
       <header class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
         <h1 class="text-lg font-semibold text-gray-800">KPI Школьная система</h1>
         <div class="flex items-center gap-4">
+          <router-link to="/profile" class="flex items-center gap-2 text-sm text-gray-600 hover:text-blue-700">
+            <img
+              v-if="auth.user?.avatar_url"
+              :src="auth.user.avatar_url"
+              class="w-8 h-8 rounded-full object-cover border"
+              alt=""
+            />
+            <span v-else class="w-8 h-8 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-semibold">
+              {{ auth.user?.first_name?.[0] || auth.user?.full_name?.[0] || 'U' }}
+            </span>
+          </router-link>
           <span class="text-sm text-gray-600">{{ auth.user?.full_name }}</span>
           <span class="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
             {{ roleLabel(auth.user?.role) }}
@@ -54,6 +65,7 @@ export default {
         deputy_science: 'Зам. по НТР',
         teacher: 'Учитель',
         student: 'Ученик',
+        parent: 'Родитель',
       }
       return labels[role] || role
     }

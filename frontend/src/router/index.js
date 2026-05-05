@@ -11,6 +11,9 @@ const routes = [
     children: [
       { path: '', redirect: '/dashboard' },
       { path: 'dashboard', component: () => import('@/views/DashboardView.vue') },
+      { path: 'profile', component: () => import('@/views/ProfileView.vue') },
+      { path: 'chat', component: () => import('@/views/ChatView.vue') },
+      { path: 'teacher-votes', component: () => import('@/views/TeacherVotesView.vue') },
 
       // Олимпиады
       { path: 'olympiads', component: () => import('@/views/olympiad/OlympiadListView.vue') },
@@ -22,12 +25,12 @@ const routes = [
       { path: 'users/import', component: () => import('@/views/admin/ImportView.vue'), meta: { roles: ['admin'] } },
 
       // Результаты
-      { path: 'results', component: () => import('@/views/ResultsView.vue') },
+      { path: 'results', component: () => import('@/views/ResultsView.vue'), meta: { roles: ['admin', 'director', 'deputy_events', 'deputy_edu', 'deputy_science', 'teacher', 'student'] } },
       { path: 'results/pending', component: () => import('@/views/PendingResultsView.vue'), meta: { roles: ['admin', 'director', 'deputy_events', 'deputy_edu', 'deputy_science'] } },
 
       // KPI
-      { path: 'kpi', component: () => import('@/views/kpi/KpiView.vue') },
-      { path: 'kpi/appeals', component: () => import('@/views/kpi/AppealsView.vue') },
+      { path: 'kpi', component: () => import('@/views/kpi/KpiView.vue'), meta: { roles: ['admin', 'director', 'deputy_events', 'deputy_edu', 'deputy_science', 'teacher', 'student'] } },
+      { path: 'kpi/appeals', component: () => import('@/views/kpi/AppealsView.vue'), meta: { roles: ['admin', 'director', 'deputy_events', 'deputy_edu', 'deputy_science', 'teacher'] } },
 
       // Рейтинги
       { path: 'ratings', component: () => import('@/views/RatingsView.vue') },
@@ -55,6 +58,7 @@ router.beforeEach((to, from, next) => {
   if (to.meta.guest && auth.isLoggedIn) return next('/dashboard')
 
   if (to.meta.roles && !to.meta.roles.includes(auth.role)) return next('/dashboard')
+  if (auth.isLoggedIn && auth.mustChangePassword && to.path !== '/profile') return next('/profile')
 
   next()
 })

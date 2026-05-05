@@ -14,21 +14,29 @@ class User extends Authenticatable
     protected $fillable = [
         'last_name', 'first_name', 'middle_name',
         'login', 'password', 'role',
-        'class_id', 'subject_id', 'age',
+        'class_id', 'subject_id', 'age', 'avatar_path', 'must_change_password',
         'is_class_teacher', 'class_teacher_class_id', 'is_active',
     ];
 
     protected $hidden = ['password', 'remember_token'];
 
+    protected $appends = ['full_name', 'avatar_url'];
+
     protected $casts = [
         'is_class_teacher' => 'boolean',
         'is_active' => 'boolean',
+        'must_change_password' => 'boolean',
         'password' => 'hashed',
     ];
 
     public function getFullNameAttribute(): string
     {
         return trim("{$this->last_name} {$this->first_name} {$this->middle_name}");
+    }
+
+    public function getAvatarUrlAttribute(): ?string
+    {
+        return $this->avatar_path ? asset('storage/' . $this->avatar_path) : null;
     }
 
     public function schoolClass()
@@ -56,11 +64,22 @@ class User extends Authenticatable
         return $this->hasMany(OlympiadRegistration::class, 'student_id');
     }
 
+    public function chatMessages()
+    {
+        return $this->hasMany(ChatMessage::class);
+    }
+
+    public function teacherVotes()
+    {
+        return $this->hasMany(TeacherVote::class, 'voter_id');
+    }
+
     public function isAdmin(): bool { return $this->role === 'admin'; }
     public function isDirector(): bool { return $this->role === 'director'; }
     public function isDeputy(): bool { return in_array($this->role, ['deputy_events', 'deputy_edu', 'deputy_science']); }
     public function isTeacher(): bool { return $this->role === 'teacher'; }
     public function isStudent(): bool { return $this->role === 'student'; }
+    public function isParent(): bool { return $this->role === 'parent'; }
 
     public function canVerify(): bool
     {

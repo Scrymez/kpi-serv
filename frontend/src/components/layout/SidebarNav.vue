@@ -6,7 +6,9 @@ const auth = useAuthStore()
 const navItems = [
   { to: '/dashboard', label: 'Главная', icon: '🏠', roles: null },
   { to: '/olympiads', label: 'Олимпиады', icon: '🏆', roles: null },
-  { to: '/results', label: 'Результаты', icon: '📋', roles: null },
+  { to: '/chat', label: 'Общий чат', icon: '💬', roles: null },
+  { to: '/teacher-votes', label: 'Голосование', icon: '🗳️', roles: ['parent'] },
+  { to: '/results', label: 'Результаты', icon: '📋', roles: ['admin', 'director', 'deputy_events', 'deputy_edu', 'deputy_science', 'teacher', 'student'] },
   { to: '/results/pending', label: 'На верификации', icon: '✅', roles: ['admin', 'director', 'deputy_events', 'deputy_edu', 'deputy_science'] },
   { to: '/kpi', label: 'Мой KPI', icon: '📊', roles: ['teacher'] },
   { to: '/kpi/appeals', label: 'Апелляции', icon: '📝', roles: ['admin', 'director', 'deputy_events', 'deputy_edu', 'deputy_science', 'teacher'] },
@@ -14,6 +16,7 @@ const navItems = [
   { to: '/reports', label: 'Отчёты', icon: '📑', roles: ['admin', 'director', 'deputy_events', 'deputy_edu', 'deputy_science'] },
   { to: '/users', label: 'Пользователи', icon: '👥', roles: ['admin'] },
   { to: '/settings', label: 'Настройки KPI', icon: '⚙️', roles: ['admin'] },
+  { to: '/profile', label: 'Настройки профиля', icon: '👤', roles: null },
 ]
 
 function canShow(item) {

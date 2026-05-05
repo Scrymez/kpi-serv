@@ -34,6 +34,8 @@ class AuthController extends Controller
                 'full_name' => $user->full_name,
                 'login' => $user->login,
                 'role' => $user->role,
+                'avatar_url' => $user->avatar_url,
+                'must_change_password' => $user->must_change_password,
             ],
         ]);
     }
@@ -55,6 +57,8 @@ class AuthController extends Controller
             'middle_name' => $user->middle_name,
             'login' => $user->login,
             'role' => $user->role,
+            'avatar_url' => $user->avatar_url,
+            'must_change_password' => $user->must_change_password,
             'class' => $user->schoolClass,
             'subject' => $user->subject,
             'is_class_teacher' => $user->is_class_teacher,

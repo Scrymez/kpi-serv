@@ -47,10 +47,13 @@ return new class extends Migration
                 'deputy_science',
                 'teacher',
                 'student',
+                'parent',
             ]);
             $table->unsignedBigInteger('class_id')->nullable();
             $table->unsignedBigInteger('subject_id')->nullable();
             $table->unsignedTinyInteger('age')->nullable();
+            $table->string('avatar_path')->nullable();
+            $table->boolean('must_change_password')->default(true);
             $table->boolean('is_class_teacher')->default(false);
             $table->unsignedBigInteger('class_teacher_class_id')->nullable();
             $table->boolean('is_active')->default(true);

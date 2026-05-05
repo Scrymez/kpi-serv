@@ -51,6 +51,7 @@ async function downloadCredentials() {
           <label class="block text-sm font-medium text-gray-700 mb-2">Кого импортируем</label>
           <select v-model="role" class="border rounded-lg px-4 py-2 text-sm w-full">
             <option value="student">Ученики</option>
+            <option value="parent">Родители</option>
             <option value="teacher">Учителя (только учителя)</option>
             <option value="staff">Сотрудники (с должностью)</option>
           </select>
@@ -58,7 +59,7 @@ async function downloadCredentials() {
 
         <div>
           <button @click="downloadTemplate" class="text-sm text-blue-600 underline hover:text-blue-800">
-            Скачать шаблон Excel для {{ role === 'student' ? 'учеников' : 'сотрудников' }}
+            Скачать шаблон Excel
           </button>
         </div>
 
@@ -120,6 +121,27 @@ async function downloadCredentials() {
           <div class="mt-3 text-xs text-gray-500 bg-gray-50 rounded-lg p-3">
             <strong>Пример строки:</strong><br>
             <span class="font-mono">Иванов | Иван | Иванович | 14 | 9А</span>
+          </div>
+        </div>
+
+        <div v-if="role === 'parent'" class="bg-white rounded-xl border p-5">
+          <h3 class="font-semibold text-gray-800 mb-3">Формат файла — Родители</h3>
+          <div class="overflow-x-auto">
+            <table class="text-xs w-full">
+              <thead>
+                <tr class="bg-green-50">
+                  <th class="px-3 py-2 text-left font-semibold text-green-800">Столбец</th>
+                  <th class="px-3 py-2 text-left font-semibold text-green-800">Обязателен</th>
+                  <th class="px-3 py-2 text-left font-semibold text-green-800">Описание / Пример</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-100">
+                <tr><td class="px-3 py-2 font-mono font-semibold text-gray-700">familiya</td><td class="px-3 py-2 text-green-600">Да</td><td class="px-3 py-2 text-gray-600">Фамилия — <em>Иванова</em></td></tr>
+                <tr><td class="px-3 py-2 font-mono font-semibold text-gray-700">imya</td><td class="px-3 py-2 text-green-600">Да</td><td class="px-3 py-2 text-gray-600">Имя — <em>Ольга</em></td></tr>
+                <tr><td class="px-3 py-2 font-mono font-semibold text-gray-700">otchestvo</td><td class="px-3 py-2 text-gray-400">Нет</td><td class="px-3 py-2 text-gray-600">Отчество — <em>Павловна</em></td></tr>
+                <tr><td class="px-3 py-2 font-mono font-semibold text-gray-700">vozrast</td><td class="px-3 py-2 text-gray-400">Нет</td><td class="px-3 py-2 text-gray-600">Возраст — <em>39</em></td></tr>
+              </tbody>
+            </table>
           </div>
         </div>
 

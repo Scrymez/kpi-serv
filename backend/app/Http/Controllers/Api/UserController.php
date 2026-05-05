@@ -36,7 +36,7 @@ class UserController extends Controller
             'last_name' => 'required|string|max:100',
             'first_name' => 'required|string|max:100',
             'middle_name' => 'nullable|string|max:100',
-            'role' => 'required|in:admin,director,deputy_events,deputy_edu,deputy_science,teacher,student',
+            'role' => 'required|in:admin,director,deputy_events,deputy_edu,deputy_science,teacher,student,parent',
             'class_id' => 'nullable|exists:school_classes,id',
             'subject_id' => 'nullable|exists:subjects,id',
             'age' => 'nullable|integer|min:5|max:80',
@@ -47,6 +47,7 @@ class UserController extends Controller
         $plainPassword = UserService::generatePassword();
         $data['login'] = UserService::generateLogin($data['last_name'], $data['first_name']);
         $data['password'] = Hash::make($plainPassword);
+        $data['must_change_password'] = true;
 
         $user = User::create($data);
 
@@ -92,7 +93,7 @@ class UserController extends Controller
     {
         $request->validate([
             'file' => 'required|file|mimes:xlsx,xls',
-            'role' => 'required|in:teacher,student,staff',
+            'role' => 'required|in:teacher,student,parent,staff',
         ]);
 
         $import = new UsersImport($request->role);
